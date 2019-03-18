@@ -85,6 +85,13 @@ Template.sideNav.onRendered(function() {
 	lazyloadtick();
 	const first_channel_login = settings.get('First_Channel_After_Login');
 	const room = roomTypes.findRoom('c', first_channel_login, Meteor.userId());
+	// Presumably, the problem lies on this line because we don't always want to
+	// `go` to first_channel_login, especially if that takes us away from
+	// our original intended route i.e., navigating to a permalinked message.
+	//
+	// Unfortunately, it's not clear how best to avoid this: `go` should probably
+	// only be invoked if no other channel or intent was specified in the URL --
+	// but even that might be insufficient.
 	if (room !== undefined && room._id !== '') {
 		FlowRouter.go(`/channel/${ first_channel_login }`);
 	}
